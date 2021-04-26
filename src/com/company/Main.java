@@ -1,20 +1,21 @@
 package com.company;
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public class Main {
     public static Scanner esc = new Scanner(System.in);
     public static int Seleccion = 0;
-    public static int contc = 0, contp = 0;
+    public static int contc = 0, contp = 0,clsel=0,elpe=0;
     public static clientes[] listaclientes = new clientes[1];
     public static peliculas[] listapeliculas = new peliculas[1];
+    public static String[] red = new String[1];
+    public static int[] cont1 = new int [1];
     public final static int x = 1;
+    public static int inc=0;
+    public static clientes Lclientes;
+
 
     public static void main(String[] args) {
-
-
-        //---------------------------------------------------------------------------------------------------------------------
-
+        //menu pricipal---------------------------------------------------------------------------------------------------------------------
         do {
             System.out.println("//////////////////////////////////////////////////// ");
             System.out.println("/                      NECFLIS                     /");
@@ -24,7 +25,7 @@ public class Main {
             System.out.print("Ingrese Opción: ");
             Seleccion = esc.nextInt();
             switch (Seleccion) {
-                //CLIENTES-----------------------
+          //menu clientes------------------------------------------------------------------------------
                 case 1:
                     int costumer = 0;
                     do {
@@ -35,19 +36,21 @@ public class Main {
                         costumer = esc.nextInt();
                         switch (costumer) {
                             case 1:
-                                System.out.println("LISTADO DE CLIENTES");
+                                System.out.println("LISTADO DE CLIENTES"+"\n");
                                 mostrarlistc();
                                 break;
                             case 2:
-                                System.out.println("INGRESE LOS DATOS DEL CLIENTE");
+                                System.out.println("INGRESE LOS DATOS DEL CLIENTE"+"\n");
                                 llenarcliente();
-                                listaclientes = incrementarlistc(listaclientes);
+
+
+
 
 
                                 break;
                             case 3:
                                 System.out.println("SELECCIONE EL CLIENTE QUE DESEA OBSERVAR");
-                                //PLALIST DEL CLIENTE
+                                casee();
                                 int OB = 0;
                                 do {
 
@@ -57,10 +60,13 @@ public class Main {
                                     switch (OB) {
                                         case 1:
                                             System.out.println("PLAYLIST");
+                                            playlisclient();
+
 
                                             break;
                                         case 2:
                                             System.out.println("AGREGAR PELICULA");
+                                            ingresar();
 
                                             break;
                                         default:
@@ -82,17 +88,17 @@ public class Main {
                     System.out.println("//////////////////////////////////////////////////// ");
                     do {
                         System.out.println("\n 1.VER LISTADO DE PELICULAS." + "\n 2. CREAR PELICULA." + "\n 3.ATRAS.");
-                        System.out.print("Ingrese Opción: ");
+                        System.out.print("Ingrese Opción: "+"\n");
                         pelis = esc.nextInt();
                         switch (pelis) {
                             case 1:
-                                System.out.println("LISTADO DE PELICULAS.");
+                                System.out.println( "\n"+"LISTADO DE PELICULAS.");
                                 mostrarlistp();
                                 break;
                             case 2:
-                                System.out.println("CREE NUEVA PELICULA.");
+                                System.out.println( "\n"+"CREE NUEVA PELICULA."+ "\n");
                                 llenarpeliculas();
-                                listapeliculas = incrementarlistp(listapeliculas);
+
 
                                 break;
                             default:
@@ -102,6 +108,8 @@ public class Main {
             }
         } while (Seleccion != 3);
     }
+
+
     //case 1 clientes---------------------------------------------------------------------------------------------------------------------
     //case 2 ingresar datos del cliente
     public static void llenarcliente() {
@@ -116,7 +124,11 @@ public class Main {
         clientes Lclientes = new clientes(nombre, direccion, edad);
         listaclientes[contc] = Lclientes;
         contc++;
+        listaclientes = incrementarlistc(listaclientes);
+
+
     }
+
 
     // case 1 imprimir lista
     public static void mostrarlistc() {
@@ -131,6 +143,7 @@ public class Main {
 
     }
 
+
     //aumentar listaclientes
     public static clientes[] incrementarlistc(clientes[] listaclientes) {
         clientes[] listaclientesredim = new clientes[listaclientes.length + x];
@@ -138,6 +151,55 @@ public class Main {
         return listaclientesredim;
 
     }
+
+
+    public static void playlisclient(){
+        if(cont1[clsel-1] == 0){
+
+            System.out.println("No hay peliculas en la Playlist de "+ Lclientes.nombre);
+
+        }else{
+
+            clientes Lclientes = listaclientes[clsel - 1];
+            System.out.println("Playlist de "+ Lclientes.nombre);
+            System.out.println("-"+red[clsel-1]);
+
+        }
+    }
+
+    public static void ingresar(){
+        esc.nextLine();
+        if(contp == 0){
+
+            System.out.println("Aún no se registran peliculas");
+
+        }else{
+
+            for (int i = 0; i < listapeliculas.length-1; i++) {
+                peliculas Lpeliculas = listapeliculas[i];
+                System.out.println(i+1+"   "+Lpeliculas.nombrep);
+            }
+
+            System.out.println("INGRESE NUMERO DE PELICULA");
+            elpe = esc.nextInt();
+
+            while(elpe > listapeliculas.length){
+
+                System.out.println("NO EXISTE OPCION");
+                System.out.println("INGRESE NUMERO DE PELICULA");
+                elpe = esc.nextInt();
+
+            }
+            cont1[clsel-1] += 1;
+            peliculas Lpeliculas = listapeliculas[elpe-1];
+            red[clsel-1] += Lpeliculas.nombrep+"\n";
+            inc++;
+
+        }
+    }
+
+
+
     // case 2 Peliculas------------------------------------------------------------------------------------------------------------
     public static void llenarpeliculas() {
         esc.nextLine();
@@ -153,20 +215,18 @@ public class Main {
         peliculas Lpeliculas = new peliculas(nombrep, tipo, genero, sinopsis);
         listapeliculas[contp] = Lpeliculas;
         contp++;
-
-
+        listapeliculas = incrementarlistp(listapeliculas);
     }
 
     public static void mostrarlistp() {
         if (contp == 0) {
-            System.out.println("No hay peliculas en la lista");
+            System.out.println("La lista esta vacia");
         } else {
             for (int i = 0; i < listapeliculas.length - 1; i++) {
                 peliculas Lpeliculas = listapeliculas[i];
                 System.out.println(i + 1 + ". Nombre: " + Lpeliculas.nombrep + "  Tipo:  " + Lpeliculas.tipo + "    Género: " + Lpeliculas.genero+"    sinopsis: "+Lpeliculas.sinopsis);
             }
         }
-
     }
 
     public static peliculas[] incrementarlistp(peliculas[] listapeliculas){
@@ -175,9 +235,39 @@ public class Main {
         return listapeliculasredim;
     }
 
+    public static String [] arregloex(String[] red){
+        String [] cop = new String[red.length + x];
+        System.arraycopy(red, 0, cop, 0, red.length);
+        return cop;
+    }
 
+    public static int [] arreglox(int[] cont1){
+        int [] redmi = new int[cont1.length + x];
+        System.arraycopy(cont1, 0, redmi, 0, cont1.length);
+        return redmi;
+    }
 
+    public static void casee() {
+        if (contc == 0) {
 
+            System.out.println("No hay clientes registrados");
+
+        } else {
+
+            for (int i = 0; i < listaclientes.length - 1; i++) {
+                Lclientes = listaclientes[i];
+                System.out.println(i + 1 + "--" + Lclientes.nombre);
+            }
+            System.out.println("SELECCIONE CLIENTE: ");
+            clsel = esc.nextInt();
+            while (clsel > listaclientes.length) {
+                System.out.println("NO EXISTE ESE NUMERO DE PELICULA");
+                System.out.println("SELECCIONE CLIENTE: ");
+                clsel = esc.nextInt();
+
+            }
+        }
+    }
 
 
 }

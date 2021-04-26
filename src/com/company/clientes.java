@@ -2,6 +2,7 @@ package com.company;
 
 public class clientes {
 
+
     public String nombre;
     public String direccion;
     public int edad;
